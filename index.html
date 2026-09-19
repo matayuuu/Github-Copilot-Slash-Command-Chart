@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="GitHub Copilotのスラッシュコマンドを環境別に検索。日本語の説明、使い方、公式資料をまとめた非公式のコマンドカタログです。"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Copilot Command Atlas — スラッシュコマンド検索</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#search">コマンド検索へ移動</a>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Command Atlas ホーム">
+        <span class="brand-mark" aria-hidden="true">/_</span>
+        <span>command<span class="brand-light">atlas</span><span class="brand-dot">.</span></span>
+      </a>
+      <span class="header-caption">A FIELD GUIDE FOR GITHUB COPILOT</span>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-button" type="button" aria-label="テーマを切り替える">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            aria-hidden="true"
+          >
+            <path d="M20 14.4A8.5 8.5 0 0 1 9.6 4a8.5 8.5 0 1 0 10.4 10.4Z" />
+          </svg>
+          <span id="theme-label">テーマ</span>
+        </button>
+        <a
+          class="repo-link"
+          href="https://github.com/matayuuu/Github-Copilot-Slash-Command-Chart"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub <span aria-hidden="true">↗</span><span class="sr-only">（新しいタブ）</span>
+        </a>
+      </div>
+    </header>
+    <div id="app">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <div class="eyebrow">
+            <span class="live-dot" aria-hidden="true"></span> THE SLASH COMMAND REFERENCE
+          </div>
+          <h1 id="page-title">その一手を、<span class="slash-accent">/</span> から探そう。</h1>
+          <p>環境ごとに違うCopilotのコマンドを、ひとつのカタログに。</p>
+        </div>
+        <div class="intro-meta">
+          <span class="unofficial-label">非公式・コミュニティカタログ</span>
+          <span class="verification-date">公式資料の確認 <time id="verified-date"></time></span>
+        </div>
+      </section>
+      <main class="workspace">
+        <aside class="sidebar" aria-label="検索条件">
+          <div class="sidebar-heading">
+            <span>ENVIRONMENTS</span><span id="environment-total" class="muted-counter"></span>
+          </div>
+          <nav id="environment-filters" aria-label="利用環境"></nav>
+          <div class="sidebar-category">
+            <label for="category-filter" class="sidebar-heading">用途で絞り込む</label>
+            <select id="category-filter" aria-label="用途">
+              <option value="all">すべての用途</option>
+            </select>
+          </div>
+          <div class="sidebar-note">
+            <span class="note-icon" aria-hidden="true">i</span>
+            <p>同じコマンドでも、<br />環境によって働きが異なります。</p>
+          </div>
+          <button id="sources-open" class="text-button sources-button" type="button">
+            収録範囲・出典 <span aria-hidden="true">↗</span>
+          </button>
+        </aside>
+        <section class="catalog" aria-label="コマンドカタログ">
+          <div class="search-area">
+            <label class="search-box" for="search">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m16 16 4.5 4.5" />
+              </svg>
+              <input
+                id="search"
+                type="search"
+                placeholder="コマンド名や、やりたいことで検索…"
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="コマンドを検索"
+                aria-describedby="search-hint"
+              />
+              <kbd aria-hidden="true">/</kbd>
+            </label>
+            <div class="search-hints" id="search-hint">
+              <span>例えば</span>
+              <button type="button" data-query="explain">/explain</button>
+              <button type="button" data-query="fix">/fix</button>
+              <button type="button" data-query="plan">/plan</button>
+              <span class="search-tip">日本語でも検索できます</span>
+            </div>
+          </div>
+          <div id="url-notice" class="notice" role="status" hidden></div>
+          <div class="results-toolbar">
+            <div>
+              <h2 id="results-title">すべてのコマンド</h2>
+              <span
+                id="result-count"
+                class="count-badge"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              ></span>
+            </div>
+            <button id="reset-filters" type="button" class="text-button" hidden>
+              条件をクリア
+            </button>
+          </div>
+          <div class="list-heading" aria-hidden="true">
+            <span>COMMAND / DESCRIPTION</span><span>ENVIRONMENT</span>
+          </div>
+          <div id="results-scroll" class="results-scroll">
+            <ul id="command-list" class="command-list" aria-labelledby="results-title"></ul>
+            <div id="empty-state" class="empty-state" hidden></div>
+          </div>
+          <div class="catalog-footer">
+            <span id="catalog-total"></span><span>閲覧無料・ログイン不要</span>
+          </div>
+        </section>
+        <aside id="detail-pane" class="detail-pane" aria-label="コマンドの詳細"></aside>
+      </main>
+      <footer class="site-footer">
+        <span
+          ><strong>commandatlas.</strong> <span class="footer-divider">/</span> Built for the
+          curious.</span
+        >
+        <p>
+          完全な一覧・リアルタイム更新ではありません。利用環境の <code>/</code> や
+          <code>/help</code> でもご確認ください。
+        </p>
+      </footer>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+    <dialog id="sources-dialog" class="sources-dialog" aria-labelledby="sources-title">
+      <div class="dialog-header">
+        <h2 id="sources-title">収録範囲と公式資料</h2>
+        <button id="sources-close" type="button" class="icon-button" aria-label="出典を閉じる">
+          ✕
+        </button>
+      </div>
+      <div id="sources-content"></div>
+    </dialog>
+    <dialog id="copy-dialog" class="copy-dialog" aria-labelledby="copy-title">
+      <div class="dialog-header">
+        <h2 id="copy-title">手動でコピーしてください</h2>
+        <button id="copy-close" type="button" class="icon-button" aria-label="コピー案内を閉じる">
+          ✕
+        </button>
+      </div>
+      <p>
+        ブラウザーがクリップボードへの書き込みを許可しませんでした。下の文字列を選択してコピーできます。
+      </p>
+      <label for="copy-text" class="sr-only">コピーする文字列</label
+      ><textarea id="copy-text" readonly rows="4"></textarea>
+    </dialog>
+    <noscript
+      ><p class="notice">
+        検索にはJavaScriptが必要です。<a
+          href="https://docs.github.com/en/copilot/reference/chat-cheat-sheet"
+          >公式チートシート</a
+        >からコマンドを確認できます。
+      </p></noscript
+    >
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
