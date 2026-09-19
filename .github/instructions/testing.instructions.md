@@ -1,6 +1,6 @@
 ---
 description: VitestとPlaywrightでデータ契約、失敗条件、実際の画面操作を再現可能に検証する。
-applyTo: 'tests/**/*.ts,vitest.config.ts,playwright.config.ts'
+applyTo: 'tests/**/*.ts,vitest.config.ts,playwright*.config.ts'
 ---
 
 # テスト
@@ -8,6 +8,7 @@ applyTo: 'tests/**/*.ts,vitest.config.ts,playwright.config.ts'
 ## 配置と責務
 
 - 単体テストは`tests/unit/`、ブラウザーテストは`tests/e2e/`に置く。AI向け規約やGitHub Actionsの定義と混在させるために`.github/`へ移動しない。
+- 公開先のsmoke testは`tests/deployment/`に置く。ローカルのE2Eと分け、承認済みの公開先を匿名で検証する。公開commitの一致を確認せずに古いサイトへの成功を納品完了の根拠にしない。
 - VitestとPlaywrightの既存設定・fixture・helperを再利用する。設定ファイルとnpm scriptsは、各ツールが現在参照している場所を維持する。
 - 単体テストは検索、URL状態、データ整合性などの契約を検証する。検索ロジック自体の期待値を、その検証対象関数を呼ぶだけで計算しない。
 - 成功だけでなく、不正入力、境界値、失敗からの復旧を含める。検証処理の追加・変更では、意図的に壊したfixtureを先に用意して拒否できることを確認する。

@@ -12,7 +12,9 @@ Copilot、shell、外部APIをブラウザーから実行するアプリでは�
 - `src/catalog/`: データ契約、検索、URL状態、整合性検査。DOMに依存しません。
 - `src/ui/`、`src/main.ts`、`src/styles.css`: 表示とブラウザー操作。
 - `tests/unit/`、`tests/e2e/`: データ・検索と実際のブラウザー操作の検証。
+- `tests/deployment/`: 公開されたcommitと匿名での主要操作を確認するsmoke test。
 - `.github/instructions/`: TypeScript・テスト・GitHub Actionsのパス別規約。テストの実体や実行設定とは分けます。
+- `.github/pull-request-policy.md`、`.github/PULL_REQUEST_TEMPLATE.md`: PR運用と、マージ後の公開確認。
 - `.github/workflows/ci-pages.yml`: 検証とPages公開。デプロイの権限は専用jobに限定します。
 - `dist/`: ビルド生成物。編集・コミットしません。
 
@@ -29,3 +31,5 @@ Copilot、shell、外部APIをブラウザーから実行するアプリでは�
 資料で未確認の機能を「未対応」と断定せず、確認日をリリース日として表示しません。
 Pagesのproject site用サブパスを維持し、共有URLはqueryを使います。
 コミット、push、main反映、GitHubの設定変更、初回公開は実装承認とは分けて確認します。
+通常はPR経由で反映し、`main`反映後は対象SHAのCI/CDと公開先の確認まで追跡します。
+運用の正本は[PR・公開方針](.github/pull-request-policy.md)です。承認待ち・実行中・失敗を完了扱いにしません。
