@@ -4,7 +4,7 @@ GitHub Copilotのスラッシュコマンドを、日本語で検索できる非
 
 環境・用途での絞り込み、使用例と構文のコピー、公式資料へのリンク、検索URLの共有、ライト／ダーク表示に対応します。ブラウザーだけで利用でき、カタログの閲覧にGitHubへのログインやCopilot契約は必要ありません。Copilotやshellコマンドを実行する機能はありません。
 
-公開予定先: <https://matayuuu.github.io/Github-Copilot-Slash-Command-Chart/>
+公開サイト: <https://matayuuu.github.io/Github-Copilot-Slash-Command-Chart/>
 
 ## 掲載情報について
 
@@ -42,16 +42,17 @@ npm run preview
 
 ## 開発と検証
 
-| コマンド               | 内容                                             |
-| ---------------------- | ------------------------------------------------ |
-| `npm run typecheck`    | TypeScriptの型検査                               |
-| `npm run lint`         | ESLint                                           |
-| `npm run format:check` | Prettierの書式検査                               |
-| `npm run format`       | 書式の更新                                       |
-| `npm test`             | データ整合性、検索、URL状態の単体テスト          |
-| `npm run build`        | 型検査と本番用のビルド                           |
-| `npm run check`        | 型検査、lint、書式、単体テスト、ビルドを順に実行 |
-| `npm run test:e2e`     | ビルド済みサイトを使うPlaywrightテスト           |
+| コマンド                  | 内容                                                    |
+| ------------------------- | ------------------------------------------------------- |
+| `npm run typecheck`       | TypeScriptの型検査                                      |
+| `npm run lint`            | ESLint                                                  |
+| `npm run format:check`    | Prettierの書式検査                                      |
+| `npm run format`          | 書式の更新                                              |
+| `npm test`                | データ整合性、検索、URL状態の単体テスト                 |
+| `npm run build`           | 型検査と本番用のビルド                                  |
+| `npm run check`           | 型検査、lint、書式、単体テスト、ビルドを順に実行        |
+| `npm run test:e2e`        | ビルド済みサイトを使うPlaywrightテスト                  |
+| `npm run test:deployment` | 公開先のSHA・画面操作を確認するsmoke test（CDから実行） |
 
 初回のブラウザーテスト前に、宣言済みPlaywrightのブラウザーを導入します。LinuxでOSライブラリも必要な場合は`--with-deps`を付けます。
 
@@ -63,21 +64,24 @@ npm run test:e2e
 
 E2Eは専用のpreviewプロセスをポート4173で起動します。別のpreviewが同じポートを使っている場合は、そのプロセスを終了してから実行してください。ChromiumとFirefox、モバイル相当のviewportで検証します。モバイル相当のブラウザーテストは実機検証ではありません。
 
+公開後の検証は`playwright.deployment.config.ts`と`tests/deployment/`に分離しています。CDが`DEPLOYMENT_URL`と`EXPECTED_REVISION`を渡し、公開先のrevisionと主要操作を匿名で確認します。ローカルサーバーや認証付きURL、未指定のSHAへ成功した結果で公開確認を代用しない構成です。
+
 ## 開発規約と配置
 
 AI向けの規約は`.github/instructions/`で対象ごとに管理します。`applyTo`は適用するファイルを絞るための指定です。規約を書くだけでコードが自動的に強制・検査されるわけではないため、型検査・ESLint・Prettier・テスト・CIも併用します。
 
 Copilot CLIの既存セッションへ新しいInstructionsを反映する場合は、セッションの再開または新しいセッションの開始が必要です。ファイルが一覧に発見されることと、実行中のセッションへ反映されることは区別してください。
 
-| 対象                             | 規約・実装の場所                                                                                                      |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| 全体に共通する変更方針           | [.github/copilot-instructions.md](.github/copilot-instructions.md)                                                    |
-| TypeScriptの型安全性・コード規約 | [typescript.instructions.md](.github/instructions/typescript.instructions.md)                                         |
-| テストの設計・実行方針           | [testing.instructions.md](.github/instructions/testing.instructions.md)                                               |
-| CI/CDの権限・公開方針            | [github-actions.instructions.md](.github/instructions/github-actions.instructions.md)                                 |
-| テスト本体                       | `tests/unit/`、`tests/e2e/`                                                                                           |
-| CI/CDの実行定義                  | `.github/workflows/ci-pages.yml`                                                                                      |
-| 型・lint・書式・runnerの設定     | リポジトリルートの`tsconfig.json`、`eslint.config.js`、`.prettierrc.json`、`vitest.config.ts`、`playwright.config.ts` |
+| 対象                             | 規約・実装の場所                                                                                                       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 全体に共通する変更方針           | [.github/copilot-instructions.md](.github/copilot-instructions.md)                                                     |
+| TypeScriptの型安全性・コード規約 | [typescript.instructions.md](.github/instructions/typescript.instructions.md)                                          |
+| テストの設計・実行方針           | [testing.instructions.md](.github/instructions/testing.instructions.md)                                                |
+| CI/CDの権限・公開方針            | [github-actions.instructions.md](.github/instructions/github-actions.instructions.md)                                  |
+| PR運用・公開の完了条件           | [pull-request-policy.md](.github/pull-request-policy.md)、[PRテンプレート](.github/PULL_REQUEST_TEMPLATE.md)           |
+| テスト本体                       | `tests/unit/`、`tests/e2e/`                                                                                            |
+| CI/CDの実行定義                  | `.github/workflows/ci-pages.yml`                                                                                       |
+| 型・lint・書式・runnerの設定     | リポジトリルートの`tsconfig.json`、`eslint.config.js`、`.prettierrc.json`、`vitest.config.ts`、`playwright*.config.ts` |
 
 テスト本体はGitHub Actionsだけでなくローカルからも実行するため、`tests/`を維持します。CIからはnpm scriptsを呼び、実行方法や検証ロジックの重複を避けます。Pythonなど未使用の言語用の規約は先に作らず、導入時に実際の依存管理・lint・テスト構成に合わせて追加します。
 
@@ -97,11 +101,15 @@ Copilot CLIの既存セッションへ新しいInstructionsを反映する場合
 
 `.github/workflows/ci-pages.yml`が検証と公開を担当します。PRでは検証のみ実行し、`main`へのpushまたは`main`を指定した手動実行では、検証成功後に`dist`だけを公開します。Viteの`base`は、このリポジトリ名のproject site用サブパスに設定しています。
 
+通常の変更は作業ブランチからPRで反映します。PRの`check`成功と必要なレビュー・マージ許可を確認し、マージ後は対象SHAの`check` → `deploy` → `verify-deployment`を最後まで追跡します。手順と報告項目は[PR・公開方針](.github/pull-request-policy.md)を参照してください。
+
 初回公開には、リポジトリ管理者による **Settings → Pages → Build and deployment → Source: GitHub Actions** の設定が必要です。コミット・push・`main`への反映・Pages設定変更・初回公開は、それぞれ対象と影響を確認してから行ってください。
 
-検証jobは読み取り権限を使い、デプロイjobにのみ`pages: write`と`id-token: write`を付与します。独自のPATやAPIキーは不要です。GitHub側の権限・ポリシー・environment保護によっては、管理者の追加操作が必要です。
+検証jobと公開後の確認jobは読み取り権限を使い、デプロイjobにのみ`pages: write`と`id-token: write`を付与します。独自のPATやAPIキーは不要です。GitHub側の権限・ポリシー・environment保護によっては、管理者の追加操作が必要です。
 
-公開後は、Actionsのデプロイ結果に表示されるURLを認証なしで開き、CSS/JSの読み込み、検索、絞り込み、コピー、共有URLからの直接アクセスを確認してください。workflowの作成やローカルビルドの成功だけでは、公開成功とはみなしません。
+GitHub Actionsでのビルドは、対象の`GITHUB_SHA`を`build-info.json`とHTMLの`build-revision` metaに記録します。ローカルビルドは`local`と記録し、公開版のSHAを推測しません。`verify-deployment`は公開先のJSON・HTMLに記録されたSHA、検索・絞り込み・共有URL、assetとモバイル相当の表示を確認します。配信反映待ちは最大2分で打ち切り、不一致のまま成功扱いにしません。
+
+公開後は、Actionsのデプロイ結果に表示されるURLを認証なしで開き、必要な主要操作を確認してください。**対象SHAの3つのjobとworkflow全体が成功し、公開先の確認が済むまで完了ではありません。** `queued`・`in_progress`・失敗・必要なjobのskipは未完了です。権限や承認で進められない場合も、未完了の理由とrun URLを残します。
 
 参考: [GitHub Pagesの概要](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)、[custom workflow](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
