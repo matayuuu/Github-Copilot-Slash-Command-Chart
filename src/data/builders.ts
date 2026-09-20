@@ -15,6 +15,7 @@ type CommandDetails = Partial<
     | 'kind'
     | 'status'
     | 'sourceIds'
+    | 'lastVerified'
   >
 >;
 

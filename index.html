@@ -9,16 +9,20 @@
     />
     <meta name="color-scheme" content="dark light" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Copilot Command Atlas — スラッシュコマンド検索</title>
+    <title>GitHub Copilot Slash Command Chart — 非公式コマンドカタログ</title>
   </head>
   <body>
     <a class="skip-link" href="#search">コマンド検索へ移動</a>
     <header class="site-header">
-      <a class="brand" href="./" aria-label="Command Atlas ホーム">
-        <span class="brand-mark" aria-hidden="true">/_</span>
-        <span>command<span class="brand-light">atlas</span><span class="brand-dot">.</span></span>
-      </a>
-      <span class="header-caption">A FIELD GUIDE FOR GITHUB COPILOT</span>
+      <h1 id="page-title" class="brand-title">
+        <a class="brand" href="./" aria-label="GitHub Copilot Slash Command Chart ホーム">
+          <span class="brand-mark" aria-hidden="true">/_</span>
+          <span class="brand-name">
+            <span>GitHub Copilot</span>
+            <span>Slash Command Chart</span>
+          </span>
+        </a>
+      </h1>
       <div class="header-actions">
         <button id="theme-toggle" class="icon-button" type="button" aria-label="テーマを切り替える">
           <svg
@@ -43,21 +47,12 @@
           GitHub <span aria-hidden="true">↗</span><span class="sr-only">（新しいタブ）</span>
         </a>
       </div>
+      <div class="header-notice">
+        <span class="unofficial-label">非公式・個人運営</span>
+        <span class="verification-date">公式資料の確認 <time id="verified-date"></time></span>
+      </div>
     </header>
     <div id="app">
-      <section class="intro" aria-labelledby="page-title">
-        <div class="intro-copy">
-          <div class="eyebrow">
-            <span class="live-dot" aria-hidden="true"></span> THE SLASH COMMAND REFERENCE
-          </div>
-          <h1 id="page-title">その一手を、<span class="slash-accent">/</span> から探そう。</h1>
-          <p>環境ごとに違うCopilotのコマンドを、ひとつのカタログに。</p>
-        </div>
-        <div class="intro-meta">
-          <span class="unofficial-label">非公式・コミュニティカタログ</span>
-          <span class="verification-date">公式資料の確認 <time id="verified-date"></time></span>
-        </div>
-      </section>
       <main class="workspace">
         <aside class="sidebar" aria-label="検索条件">
           <div class="sidebar-heading">
@@ -142,14 +137,20 @@
         <aside id="detail-pane" class="detail-pane" aria-label="コマンドの詳細"></aside>
       </main>
       <footer class="site-footer">
-        <span
-          ><strong>commandatlas.</strong> <span class="footer-divider">/</span> Built for the
-          curious.</span
-        >
-        <p>
-          完全な一覧・リアルタイム更新ではありません。利用環境の <code>/</code> や
-          <code>/help</code> でもご確認ください。
-        </p>
+        <strong>GitHub Copilot Slash Command Chart</strong>
+        <div class="footer-notice">
+          <small class="site-copyright">© 2026 matayuuu</small>
+          <p>GitHub・Microsoftとは提携しておらず、両社の承認・後援を受けていません。</p>
+        </div>
+        <div>
+          <p>
+            完全な一覧・リアルタイム更新ではありません。利用環境の <code>/</code> や
+            <code>/help</code> でもご確認ください。
+          </p>
+          <p>
+            製品名は対象を説明するために使用しています。製品名・商標および公式資料の権利は、各権利者に帰属します。
+          </p>
+        </div>
       </footer>
     </div>
     <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>

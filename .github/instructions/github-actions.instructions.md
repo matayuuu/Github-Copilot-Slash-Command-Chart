@@ -19,6 +19,13 @@ applyTo: '.github/workflows/*.yml,.github/workflows/*.yaml'
 - workflow全体は`contents: read`を基本とし、`pages: write`と`id-token: write`はデプロイjobだけへ付与する。
 - 外部PRのコードへsecretsや書き込み権限を渡さない。通常の検証には`pull_request_target`を使わない。
 - checkoutの`persist-credentials: false`を維持する。静的サイト公開のために独自PATを導入しない。
+- 承認済みの限定例外として、gh-aw v0.88.7が生成する`daily-catalog-update.lock.yml`では、
+  `safe_outputs`のPR作成専用checkoutのみ短命の`GITHUB_TOKEN`を一時保存できる。
+  同コンパイラーの`safe_outputs`と`conclusion`には、生成された補助処理用の
+  Contents・Issues・Pull requests書き込み権限を認める。
+  AIの調査job・通常CIは読み取り権限と`persist-credentials: false`を維持し、
+  自動マージ・レビュー承認・workflow承認・デプロイの権限は追加しない。
+  この例外を他のworkflowへ広げず、コンパイラー更新時は生成差分と契約テストで再確認する。
 - actionは公式の実在するreleaseを確認し、既存どおりコミットSHAに固定する。更新時は参照するreleaseのコメントと必要な権限・runtimeも確認する。
 - `github-pages` environment、公開の同時実行制御、明示的なtimeoutを維持する。失敗や中断からの再実行で公開条件が緩まないようにする。
 - 同じrefのworkflowを公開後の確認まで直列化する。別runのデプロイが確認途中のサイトを差し替え、公開SHAの判定が競合しないようにする。
