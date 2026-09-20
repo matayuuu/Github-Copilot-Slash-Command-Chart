@@ -30,7 +30,7 @@ test('renders the complete local catalog without runtime errors or external API 
   });
 
   await openApp(page);
-  await expect(page).toHaveTitle(/Copilot Command Atlas/u);
+  await expect(page).toHaveTitle('GitHub Copilot Slash Command Chart — 非公式コマンドカタログ');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.locator('#result-count')).toHaveAttribute('aria-live', 'polite');
   await expectResults(page);
@@ -47,6 +47,51 @@ test('renders the complete local catalog without runtime errors or external API 
   await expect(page.locator('#sources-dialog')).toBeVisible();
   expect(errors).toEqual([]);
   expect(externalApiRequests).toEqual([]);
+});
+
+test('identifies the unofficial catalog and separates site copyright from product rights', async ({
+  page,
+}) => {
+  await openApp(page, '?env=vscode&q=explain');
+  const header = page.getByRole('banner');
+  const footer = page.getByRole('contentinfo');
+  const home = header.getByRole('link', {
+    name: 'GitHub Copilot Slash Command Chart ホーム',
+    exact: true,
+  });
+  await expect(home).toContainText('GitHub Copilot Slash Command Chart');
+  await expect(header.getByRole('heading', { level: 1 })).toContainText(
+    'GitHub Copilot Slash Command Chart',
+  );
+  await expect(page.getByText('その一手を、', { exact: false })).toHaveCount(0);
+  const verifiedDates = commands.map((command) => command.lastVerified).sort();
+  const earliest = verifiedDates[0];
+  const latest = verifiedDates.at(-1);
+  if (!earliest || !latest) throw new Error('The catalog must have verification dates.');
+  await expect(header.locator('#verified-date')).toHaveText(
+    earliest === latest ? earliest : `${earliest} – ${latest}`,
+  );
+  await expect(footer.locator('#verified-date')).toHaveCount(0);
+  await expect(footer.getByText('非公式・個人運営', { exact: true })).toHaveCount(0);
+  await expect(header.getByText('公式資料の確認', { exact: false })).toBeVisible();
+  await expect(header.getByText('非公式・個人運営', { exact: true })).toBeVisible();
+  await expect(header.getByText('© 2026 matayuuu', { exact: true })).toHaveCount(0);
+  await expect(
+    header.getByText('GitHub・Microsoftとは提携しておらず、両社の承認・後援を受けていません。'),
+  ).toHaveCount(0);
+  await expect(footer.getByText('© 2026 matayuuu', { exact: true })).toBeVisible();
+  await expect(
+    footer.getByText('GitHub・Microsoftとは提携しておらず、両社の承認・後援を受けていません。'),
+  ).toBeVisible();
+  await expect(page.getByRole('contentinfo')).toContainText(
+    '製品名・商標および公式資料の権利は、各権利者に帰属します。',
+  );
+  await home.focus();
+  await expect(home).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expectResults(page);
+  await expect(search(page)).toHaveValue('');
+  await expectParameter(page, 'env', null);
 });
 
 test('every environment button filters actual records and exposes its pressed state', async ({

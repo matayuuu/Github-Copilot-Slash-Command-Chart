@@ -4,3 +4,4 @@ playwright-report
 test-results
 package-lock.json
 .impeccable/hook.cache.json
+.github/workflows/daily-catalog-update.lock.yml

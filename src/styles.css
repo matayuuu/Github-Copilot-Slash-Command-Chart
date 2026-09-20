@@ -145,28 +145,36 @@ ul {
   top: 10px;
 }
 .site-header {
-  height: 76px;
-  padding: 0 36px;
-  display: flex;
+  padding: 18px 36px 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 36px;
+  gap: 12px 24px;
   border-bottom: 1px solid var(--line);
   background: var(--surface);
 }
+.brand-title {
+  min-width: 0;
+  line-height: 1;
+}
 .brand {
-  display: flex;
+  display: inline-flex;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: 12px;
   font-family: var(--mono);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   color: var(--text);
 }
 .brand:hover {
   text-decoration: none;
 }
 .brand-mark {
+  flex-shrink: 0;
   width: 35px;
   height: 35px;
   display: grid;
@@ -177,17 +185,24 @@ ul {
   border-radius: 9px;
   font-size: 19px;
 }
-.brand-light {
-  font-weight: 400;
+.brand-name {
+  display: grid;
+  line-height: 1.4;
 }
-.brand-dot {
-  color: var(--green);
+.header-notice,
+.footer-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: var(--secondary);
+  font-size: 11px;
 }
-.header-caption {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 1.3px;
-  color: var(--muted);
+.header-notice {
+  grid-column: 1 / -1;
+}
+.site-copyright {
+  font-size: inherit;
 }
 .header-actions {
   margin-left: auto;
@@ -224,13 +239,7 @@ ul {
 #app {
   max-width: 1800px;
   margin: 0 auto;
-}
-.intro {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 38px 36px 32px;
-  gap: 24px;
+  padding-top: 24px;
 }
 .eyebrow {
   font-family: var(--mono);
@@ -240,38 +249,6 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-.live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 3px var(--green-soft);
-}
-h1 {
-  font-size: clamp(22px, 2vw, 30px);
-  letter-spacing: -0.8px;
-  font-weight: 650;
-  line-height: 1.4;
-  margin-top: 11px;
-}
-.slash-accent {
-  color: var(--green);
-  font-family: var(--mono);
-  font-weight: 400;
-}
-.intro-copy > p {
-  margin-top: 10px;
-  color: var(--secondary);
-  font-size: 12px;
-}
-.intro-meta {
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  gap: 10px;
-  align-self: flex-end;
-  padding-bottom: 3px;
 }
 .unofficial-label {
   display: inline-block;
@@ -1011,26 +988,23 @@ kbd {
 .site-footer {
   padding: 23px 36px 30px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   color: var(--muted);
   font-size: 9px;
 }
-.site-footer > span {
+.site-footer > strong {
   font-family: var(--mono);
-  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 100%;
 }
 .site-footer strong {
   color: var(--secondary);
   font-weight: 500;
 }
-.footer-divider {
-  margin: 0 9px;
-  color: var(--line);
-}
 .site-footer p {
-  text-align: right;
+  text-align: left;
   line-height: 1.9;
 }
 .notice {
@@ -1185,10 +1159,8 @@ dialog::backdrop {
 
 @media (max-width: 1250px) {
   .site-header {
-    padding: 0 24px;
-  }
-  .intro {
-    padding: 32px 24px 28px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
   .workspace {
     margin: 0 24px;
@@ -1197,9 +1169,6 @@ dialog::backdrop {
   .sidebar {
     padding-left: 9px;
     padding-right: 9px;
-  }
-  .header-caption {
-    display: none;
   }
   .search-tip {
     display: none;
@@ -1268,9 +1237,6 @@ dialog::backdrop {
   .detail-title {
     font-size: 30px;
   }
-  .intro-meta {
-    max-width: 200px;
-  }
   .results-scroll {
     max-height: 558px;
   }
@@ -1284,13 +1250,13 @@ dialog::backdrop {
 
 @media (max-width: 680px) {
   .site-header {
-    height: 64px;
-    padding: 0 16px;
-    gap: 14px;
+    padding: 14px 16px;
+    gap: 12px;
   }
   .brand {
-    font-size: 17px;
+    font-size: 14px;
     gap: 9px;
+    letter-spacing: -0.4px;
   }
   .brand-mark {
     width: 29px;
@@ -1299,7 +1265,7 @@ dialog::backdrop {
     border-radius: 7px;
   }
   .header-actions {
-    gap: 9px;
+    gap: 4px;
   }
   #theme-label {
     display: none;
@@ -1310,39 +1276,11 @@ dialog::backdrop {
   .repo-link > span:first-child {
     margin-left: 2px;
   }
-  .intro {
-    padding: 25px 18px 22px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .intro .eyebrow {
-    font-size: 8px;
-    letter-spacing: 1.3px;
-  }
-  h1 {
-    font-size: 23px;
-    margin-top: 10px;
-  }
-  .intro-copy > p {
-    font-size: 10px;
-    line-height: 1.9;
-  }
-  .intro-meta {
-    max-width: none;
-    width: 100%;
-    align-items: flex-start;
-    flex-direction: row;
-    gap: 12px;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  #app {
+    padding-top: 16px;
   }
   .unofficial-label {
     font-size: 8px;
-  }
-  .verification-date {
-    font-size: 8px;
-    padding-top: 3px;
   }
   .verification-date time {
     margin-left: 4px;

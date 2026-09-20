@@ -42,3 +42,62 @@ for (const width of [320, 390]) {
     await page.locator('#sources-close').click();
   });
 }
+
+for (const width of [320, 390, 768, 1440]) {
+  for (const theme of ['light', 'dark'] as const) {
+    test(`${width}px ${theme} keeps the header controls and footer notices readable`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await page.emulateMedia({ colorScheme: theme });
+      await openApp(page);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      const header = page.getByRole('banner');
+      const brand = header.getByRole('link', {
+        name: 'GitHub Copilot Slash Command Chart ホーム',
+        exact: true,
+      });
+      const toggle = header.getByRole('button', {
+        name: `${theme === 'light' ? 'ダーク' : 'ライト'}テーマに切り替える`,
+        exact: true,
+      });
+      for (const element of [
+        brand,
+        toggle,
+        header.getByRole('link', { name: /GitHub.*新しいタブ/u }),
+        header.getByText('非公式・個人運営', { exact: true }),
+        header.getByText('公式資料の確認', { exact: false }),
+      ]) {
+        await expect(element).toBeVisible();
+        await expect(element).toBeInViewport();
+        const bounds = await element.boundingBox();
+        if (!bounds) throw new Error('A visible header element must have bounds.');
+        expect(bounds.x).toBeGreaterThanOrEqual(0);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+      }
+      const brandBounds = await brand.boundingBox();
+      const toggleBounds = await toggle.boundingBox();
+      if (!brandBounds || !toggleBounds) throw new Error('Header controls must have bounds.');
+      expect(brandBounds.x + brandBounds.width).toBeLessThanOrEqual(toggleBounds.x);
+      await expectNoHorizontalOverflow(page);
+      await toggle.click();
+      await expect(page.locator('html')).toHaveAttribute(
+        'data-theme',
+        theme === 'light' ? 'dark' : 'light',
+      );
+      const footer = page.getByRole('contentinfo');
+      for (const element of [
+        footer.getByText('© 2026 matayuuu', { exact: true }),
+        footer.getByText('GitHub・Microsoftとは提携しておらず、両社の承認・後援を受けていません。'),
+      ]) {
+        await element.scrollIntoViewIfNeeded();
+        await expect(element).toBeInViewport();
+        const bounds = await element.boundingBox();
+        if (!bounds) throw new Error('A visible footer notice must have bounds.');
+        expect(bounds.x).toBeGreaterThanOrEqual(0);
+        expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+      }
+      await expectNoHorizontalOverflow(page);
+    });
+  }
+}

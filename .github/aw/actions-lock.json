@@ -1,0 +1,14 @@
+{
+  "entries": {
+    "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38": {
+      "repo": "actions/setup-node",
+      "version": "249970729cb0ef3589644e2896645e5dc5ba9c38",
+      "sha": "249970729cb0ef3589644e2896645e5dc5ba9c38"
+    },
+    "github/gh-aw/actions/setup@bde367913adeb3132f0a171594c88a17f4b7d08c": {
+      "repo": "github/gh-aw/actions/setup",
+      "version": "bde367913adeb3132f0a171594c88a17f4b7d08c",
+      "sha": "bde367913adeb3132f0a171594c88a17f4b7d08c"
+    }
+  }
+}
